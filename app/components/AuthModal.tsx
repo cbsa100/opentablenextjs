@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -38,6 +38,26 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
     city: '',
     password: '',
   });
+  const [disableSubmit, setDisableSubmit] = useState(true);
+  useEffect(() => {
+    if (isSignIn) {
+      if (inputs.password && inputs.email) {
+        return setDisableSubmit(false);
+      }
+    } else {
+      if (
+        inputs.firstName &&
+        inputs.lastName &&
+        inputs.email &&
+        inputs.phone &&
+        inputs.city &&
+        inputs.password
+      ) {
+        return setDisableSubmit(false);
+      }
+    }
+    setDisableSubmit(true);
+  }, [inputs]);
   return (
     <div>
       <button
@@ -58,10 +78,7 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
         <Box sx={style}>
           <div className='p- h-[600px]'>
             <div className='uppercase font-bold text-center pb-2 border-b mb-2'>
-              <p className='text-sm'>
-                {renderContent('Sign In', 'Create Account')}
-                {inputs.email}
-              </p>
+              <p className='text-sm'>{renderContent('Sign In', 'Create Account')}</p>
             </div>
             <div className='m-auto'>
               <h2 className='text-2xl font-light text-center'>
@@ -72,7 +89,10 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
                 handleChangeInput={handleChangeInput}
                 isSignIn={isSignIn}
               />
-              <button className='uppercase bg-red-600 w-full text-white p-3 roundedd text-sm mb-5 disabled:bg-gray-400'>
+              <button
+                disabled={disableSubmit}
+                className='uppercase bg-red-600 w-full text-white p-3 roundedd text-sm mb-5 disabled:bg-gray-400'
+              >
                 {renderContent('Sign In', 'Create Account')}
               </button>
             </div>
