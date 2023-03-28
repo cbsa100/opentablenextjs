@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { createContext, useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
 
 interface User {
   id: number;
@@ -33,6 +32,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
   const fetchUser = async () => {
     try {
       const jwt = getCookie('jwt');
+      console.log(jwt);
 
       if (!jwt) {
         return setAuthState({ data: null, error: null, loading: false });
